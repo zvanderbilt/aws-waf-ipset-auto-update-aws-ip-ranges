@@ -30,8 +30,8 @@ INFO_LOGGING = os.getenv('INFO_LOGGING','false')
 if INFO_LOGGING == ['']: INFO_LOGGING = 'false'
     
 # Set Scope from environment variable
-SCOPE = os.getenv('SCOPE','GLOBAL')
-if SCOPE == ['']: SCOPE = 'GLOBAL'
+SCOPE = os.getenv('SCOPE','CLOUDFRONT')
+if SCOPE == ['']: SCOPE = 'CLOUDFRONT'
 
 #######
 

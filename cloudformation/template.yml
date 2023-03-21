@@ -29,8 +29,8 @@ Parameters:
     Description: For the "EC2" service, specify the AWS regions to add, separated by commas. Use 'all' to add all AWS regions.
   SCOPE:
     Type: String
-    Default: 'GLOBAL'
-    Description: "REGIONAL" for ec2/ELB/APIGW or "GLOBAL" for cloudfront.
+    Default: 'CLOUDFRONT'
+    Description: Use "REGIONAL" for ec2/ELB/APIGW or "CLOUDFRONT" for cloudfront.
 
 Resources:
   IPv4Set:
@@ -43,7 +43,7 @@ Resources:
       Name: !Sub
         - ${AWS::StackName}-${Suffix}
         - {Suffix: !Ref IPV4SetNameSuffix}
-      Scope: {!Ref SCOPE}
+      Scope: !Ref SCOPE
 
   IPv6Set:
     Type: AWS::WAFv2::IPSet
@@ -55,7 +55,7 @@ Resources:
       Name: !Sub
         - ${AWS::StackName}-${Suffix}
         - {Suffix: !Ref IPV6SetNameSuffix}
-      Scope: {!Ref SCOPE}
+      Scope: !Ref SCOPE
 
   LambdaUpdateWAFIPSet:
     Type: AWS::Lambda::Function
