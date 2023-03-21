@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT-0
 
 AWSTemplateFormatVersion: 2010-09-09
-Description: Creates two regional AWS WAF IP sets that are automatically updated with AWS service's IP ranges.
+Description: Creates two AWS WAF IP sets that are automatically updated with AWS service's IP ranges.
 
 Parameters:
   LambdaCodeS3Bucket:
@@ -27,6 +27,10 @@ Parameters:
     Type: String
     Default: 'all'
     Description: For the "EC2" service, specify the AWS regions to add, separated by commas. Use 'all' to add all AWS regions.
+  SCOPE:
+    Type: String
+    Default: 'GLOBAL'
+    Description: "REGIONAL" for ec2/ELB/APIGW or "GLOBAL" for cloudfront.
 
 Resources:
   IPv4Set:
@@ -39,7 +43,7 @@ Resources:
       Name: !Sub
         - ${AWS::StackName}-${Suffix}
         - {Suffix: !Ref IPV4SetNameSuffix}
-      Scope: REGIONAL
+      Scope: {!Ref SCOPE}
 
   IPv6Set:
     Type: AWS::WAFv2::IPSet
@@ -51,7 +55,7 @@ Resources:
       Name: !Sub
         - ${AWS::StackName}-${Suffix}
         - {Suffix: !Ref IPV6SetNameSuffix}
-      Scope: REGIONAL
+      Scope: {!Ref SCOPE}
 
   LambdaUpdateWAFIPSet:
     Type: AWS::Lambda::Function
@@ -82,7 +86,7 @@ Resources:
       MemorySize: 128
       Role:
         Fn::GetAtt: [ LambdaUpdateWAFIPSetIamRole, Arn ]
-      Runtime: python3.8
+      Runtime: python3.9
       Timeout: 10
       Code: 
         S3Bucket:
